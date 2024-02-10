@@ -20,13 +20,12 @@ refs.loader.style.display = 'none';
 refs.form.addEventListener('submit', onFormSubmit);
 
 function onFormSubmit(e) {
-  refs.gallery.innerHTML = '';
-  refs.loader.style.display = 'block';
   e.preventDefault();
-
-  if (refs.input.value.trim() === '') {
+  if (refs.input.value.trim() === '' || refs.input.value.trim().length === 0) {
     return;
   }
+  refs.gallery.innerHTML = '';
+  refs.loader.style.display = 'block';
 
   const userRequest = e.target.elements.search.value;
   getPhotosByRequest(userRequest)
