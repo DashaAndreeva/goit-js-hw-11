@@ -78,6 +78,5 @@ function renderPhotos(photos) {
 }
 
 function clearGallery() {
-  // Очистити контейнер галереї
   refs.gallery.innerHTML = '';
 }
