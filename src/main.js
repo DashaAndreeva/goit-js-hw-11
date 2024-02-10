@@ -2,17 +2,26 @@
 
 import iziToast from 'izitoast';
 import 'izitoast/dist/css/iziToast.min.css';
+import SimpleLightbox from 'simplelightbox';
+import 'simplelightbox/dist/simple-lightbox.min.css';
 
 const refs = {
   form: document.querySelector('.form'),
   input: document.querySelector('.input-search'),
   button: document.querySelector('.button'),
   gallery: document.querySelector('.gallery'),
+  loader: document.querySelector('.loader'),
 };
+
+let lightBox;
+
+refs.loader.style.display = 'none';
 
 refs.form.addEventListener('submit', onFormSubmit);
 
 function onFormSubmit(e) {
+  refs.gallery.innerHTML = '';
+  refs.loader.style.display = 'block';
   e.preventDefault();
 
   if (refs.input.value.trim() === '') {
@@ -20,7 +29,6 @@ function onFormSubmit(e) {
   }
 
   const userRequest = e.target.elements.search.value;
-
   getPhotosByRequest(userRequest)
     .then(data => {
       if (data.hits.length === 0) {
@@ -37,6 +45,9 @@ function onFormSubmit(e) {
     })
     .catch(err => {
       alert(err);
+    })
+    .finally(() => {
+      refs.loader.style.display = 'none';
     });
 
   e.target.reset();
@@ -75,6 +86,15 @@ function photosTemplate(photos) {
 function renderPhotos(photos) {
   const galleryMarkup = photosTemplate(photos);
   refs.gallery.innerHTML = galleryMarkup;
+
+  if (typeof lightBox !== 'undefined') {
+    lightBox.refresh();
+  } else {
+    lightBox = new SimpleLightbox('.gallery a', {
+      captionsData: 'alt',
+      captionDelay: 250,
+    });
+  }
 }
 
 function clearGallery() {
