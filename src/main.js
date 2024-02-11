@@ -13,8 +13,16 @@ refs.loader.style.display = 'none';
 refs.form.addEventListener('submit', onFormSubmit);
 
 function onFormSubmit(e) {
+  clearGallery();
+
   e.preventDefault();
-  if (refs.input.value.trim() === '' || refs.input.value.trim().length === 0) {
+  const userInput = refs.input.value.trim();
+  if (userInput === '') {
+    iziToast.error({
+      message: 'Please enter a search query.',
+      position: 'topRight',
+      transitionIn: 'fadeInLeft',
+    });
     return;
   }
   refs.gallery.innerHTML = '';
@@ -24,7 +32,7 @@ function onFormSubmit(e) {
   getPhotosByRequest(userRequest)
     .then(data => {
       if (data.hits.length === 0) {
-        clearGallery();
+        refs.loader.style.display = 'none';
         iziToast.error({
           message:
             'Sorry, there are no images matching your search query. Please try again!',
@@ -36,7 +44,11 @@ function onFormSubmit(e) {
       }
     })
     .catch(err => {
-      alert(err);
+      iziToast.error({
+        message: err.message || 'An error occurred. Please try again later.',
+        position: 'topRight',
+        transitionIn: 'fadeInLeft',
+      });
     })
     .finally(() => {
       refs.loader.style.display = 'none';
