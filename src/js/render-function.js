@@ -1,5 +1,7 @@
 import SimpleLightbox from 'simplelightbox';
+
 let lightBox;
+
 export const refs = {
   form: document.querySelector('.form'),
   input: document.querySelector('.input-search'),
